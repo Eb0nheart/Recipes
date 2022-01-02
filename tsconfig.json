@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "baseUrl": "./",
+    "target": "es5", 
+    "outDir": "/pages",
     "allowJs": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

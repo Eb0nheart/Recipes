@@ -42,7 +42,7 @@
   },
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
-    "build": "react-scripts build",
+    "build": "react-scripts --openssl-legacy-provider build -p ",
     "lint": "eslint ./src/**/*.ts ./src/**/*.tsx"
   },
   "eslintConfig": {
