@@ -1,0 +1,8 @@
+.top-row{
+    display: flex;
+}
+
+.btn-edit{
+    margin-left: auto;
+    height: 2rem;
+}

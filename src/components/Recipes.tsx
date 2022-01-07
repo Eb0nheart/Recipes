@@ -23,9 +23,8 @@ const Recipes = (props: Props | undefined) => {
 
     return (
         <div>
-            <h1>THE STUFF</h1>
-            <div className='btn btn-sm btn-success' onClick={() => props.addRecipe({id: 1, description: "This is SOOOO delicious!!!", title: "BIATCH", })}>Add Random Recipe</div>
-            {props.recipes.map(r => <RecipeComponent recipe={r}/>)}
+            <div className='btn btn-sm btn-success mb-2' onClick={() => props.addRecipe({id: props.recipes.length === 0 ? 1 : props.recipes[props.recipes.length-1].id + 1, description: "This is SOOOO delicious!!!", title: "BIATCH", })}>Add Random Recipe</div>
+            {props.recipes.sort(r => r.id).map(r => <RecipeComponent recipe={r} deleteRecipe={() => props.removeRecipe(r)}/>)}
         </div>
     );
 };
