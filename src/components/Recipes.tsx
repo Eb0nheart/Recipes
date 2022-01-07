@@ -1,8 +1,9 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { ApplicationState } from '../store';
 import * as RecipeStore from '../store/Recipe';
+import CustomPopup from './Popup';
 import RecipeComponent from './Recipe';
 
 
@@ -12,6 +13,8 @@ type Props =
     RouteComponentProps<{}>;
 
 const Recipes = (props: Props | undefined) => {
+    const [showAddRecipe, setShowAddRecipe] = useState(false);
+
     if(props === undefined){
         return(
             <div>
@@ -21,9 +24,23 @@ const Recipes = (props: Props | undefined) => {
         );
     }
 
+    const promptForRecipe = () => {
+        setShowAddRecipe(!showAddRecipe);
+    }
+
     return (
         <div>
-            <div className='btn btn-sm btn-success mb-2' onClick={() => props.addRecipe({id: props.recipes.length === 0 ? 1 : props.recipes[props.recipes.length-1].id + 1, description: "This is SOOOO delicious!!!", title: "BIATCH", })}>Add Random Recipe</div>
+            <CustomPopup title='Add Recipe' show={showAddRecipe} close={() => setShowAddRecipe(false)}>
+                <div className="input-group mb-3">
+                    <span className="input-group-text">Title</span>
+                    <input type="text" className="form-control" placeholder="Tatziki"/>
+                </div>
+                <div className="input-group">
+                    <span className="input-group-text">Recipe</span>
+                    <textarea className="form-control" aria-label="With textarea"></textarea>
+                </div>
+            </CustomPopup>
+            <div className='btn btn-sm btn-success mb-2' onClick={() => promptForRecipe()}>Add Random Recipe</div>
             {props.recipes.sort(r => r.id).map(r => <RecipeComponent recipe={r} deleteRecipe={() => props.removeRecipe(r)}/>)}
         </div>
     );
