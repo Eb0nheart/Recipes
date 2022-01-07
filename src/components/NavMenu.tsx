@@ -22,9 +22,6 @@ const NavMenu = (props: Props) => {
                                 <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink tag={Link} className="text-dark" to="/counter">Counter</NavLink>
-                            </NavItem>
-                            <NavItem>
                                 <NavLink tag={Link} className="text-dark" to="/recipes">Recipes</NavLink>
                             </NavItem>
                         </ul>
