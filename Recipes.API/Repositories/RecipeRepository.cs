@@ -1,6 +1,6 @@
-﻿namespace Recipes.API.DataAccess.Repositories;
+﻿namespace Recipes.API.Repositories;
 
-public record Recipe(Guid Id, string Title, string[] Steps, int CookTimeMinutes, int PreparationTimeMinutes);
+public record Recipe(Guid Id, string Title, string[] Steps, TimeSpan CookTimeMinutes, TimeSpan PreparationTimeMinutes);
 
 public interface IRecipeRepository
 {
