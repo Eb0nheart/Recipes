@@ -1,25 +1,8 @@
 ﻿namespace Recipes.API.Repositories;
 
-public record Recipe(Guid Id, string Title, string[] Steps, TimeSpan CookTimeMinutes, TimeSpan PreparationTimeMinutes);
+public record Recipe(int Id, string Title, string[] Steps, Ingredient[] Ingredients, TimeSpan CookTimeMinutes, TimeSpan PreparationTimeMinutes);
 
-public interface IRecipeRepository
-{
-    Task<Recipe> GetRecipeAsync(Guid Id);
-
-    Task<List<Recipe>> GetRecipesAsync();
-
-    /// <summary>
-    /// Update if non-existant, otherwise saves as new recipe.
-    /// </summary>
-    /// <param name="recipe"></param>
-    /// <returns></returns>
-    Task SaveRecipeAsync(Recipe recipe);
-
-    Task DeleteRecipeAsync(Recipe recipe);
-}
-
-
-internal class RecipeRepository : IRecipeRepository
+internal class RecipeRepository : Repository<Recipe>
 {
     private readonly ILogger<RecipeRepository> logger;
     private static List<Recipe> Recipes = new List<Recipe>();
@@ -30,25 +13,32 @@ internal class RecipeRepository : IRecipeRepository
         this.logger = logger;
     }
 
-    public Task<Recipe> GetRecipeAsync(Guid Id)
+    public Task<Recipe> GetAsync(int Id)
     {
         return Task.FromResult(Recipes.SingleOrDefault(recipe => recipe.Id == Id));
     }
 
-    public Task<List<Recipe>> GetRecipesAsync()
+    public Task<List<Recipe>> GetAsync()
     {
         return Task.FromResult(Recipes);
     }
 
-    public Task DeleteRecipeAsync(Recipe recipe)
+    public Task DeleteAsync(Recipe recipe)
     {
         Recipes.Remove(recipe);
         return Task.CompletedTask;
     }
 
-    public Task SaveRecipeAsync(Recipe recipe)
+    public Task SaveAsync(Recipe recipe)
     {
-        Recipes.Add(recipe);
+        if(Recipes.Contains(recipe)) 
+        {
+            Recipes[Recipes.IndexOf(recipe)] = recipe;
+            return Task.CompletedTask;
+        }
+
+        var recordToAdd = recipe with { Id = Recipes.Max(recipe => recipe.Id) + 1 };
+        Recipes.Add(recordToAdd);
         return Task.CompletedTask;
     }
 }

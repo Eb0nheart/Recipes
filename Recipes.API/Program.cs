@@ -5,7 +5,7 @@ using Recipes.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
+builder.Services.AddScoped<Repository<Recipe>, RecipeRepository>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
