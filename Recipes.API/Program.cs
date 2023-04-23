@@ -1,14 +1,20 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
-using Recipes.API.Repositories;
-using Recipes.API.Services;
+using Recipes.API.Controller;
+using Recipes.API.DataAccess;
+using Recipes.API.DataAccess.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<Repository<Recipe>, RecipeRepository>();
-builder.Services.AddScoped<IRecipeService, RecipeService>();
+builder.Services.AddScoped<RecipeRepository>();
+builder.Services.AddScoped<RecipeController>();
+builder.Services.AddDbContext<RecipesContext>(options =>
+{
+    options.UseInMemoryDatabase("Recipes");
+});
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(
     options => options.MapType<TimeSpan>(
@@ -22,14 +28,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-var group = app.MapGroup("recipe")
-    .WithOpenApi();
-
-group.MapGet("{id}", (Guid id, IRecipeService service) => service.GetRecipeAsync(id));
-group.MapGet("", (IRecipeService service) => service.GetRecipesAsync());
-group.MapPut("", (Recipe recipe, IRecipeService service) => service.SaveRecipeAsync(recipe));
-group.MapDelete("{id}", (Guid id, IRecipeService service) => service.DeleteRecipeAsync(id));
-
-app.UseHttpsRedirection();
+app.MapControllers();
 
 app.Run();
